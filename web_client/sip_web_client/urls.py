@@ -16,9 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from app.views import CallBackView
+from app.views import CallFromManager, CallFromAbonent
+from app.views import main_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('call/', CallBackView.as_view()),
+    path('call_from_manager/', CallFromManager.as_view()),
+    path('call_from_abonent/', CallFromAbonent.as_view()),
+    path('', main_page),
 ]
