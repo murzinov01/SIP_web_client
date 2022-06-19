@@ -4,22 +4,31 @@
 import socket
 from time import sleep
 
-HOST = '192.168.1.10'
-PORT  = 5038
+HOST = '192.168.1.9'
+PORT = 5038
 
 asterisk_login_command = '''Action: login
 Events: off
 Username: callbackuser
 Secret: 1234\n\n'''
 
-asterisk_call_command = '''Action: Originate
+call_to = '''Action: Originate
 Channel: SIP/some_manager
 Context: call_to_client
+Exten: %s
+Priority: 1
+Callerid: 1112233
+Timeout: 30000\n\n'''
+
+call_from_to = '''Action: Originate
+Channel: SIP/some_manager
+Context: call_from_abonent
 Call_from: {}
 Call_to: {}
 Priority: 1
 Callerid: 1112233
 Timeout: 30000\n\n'''
+
 
 
 def call_from_manager(number=None):
@@ -31,7 +40,7 @@ def call_from_manager(number=None):
     data = s.recv(1024)
     print(data)
 
-    call_data = f'asterisk_call_command' % number
+    call_data = call_to % number
     print(call_data)
     s.send(bytes(call_data, 'utf-8'))
     sleep(0.1)
@@ -51,7 +60,7 @@ def call_from_abonent(phone_from=None, phone_to=None):
     data = s.recv(1024)
     print(data)
 
-    call_data = asterisk_call_command.format(phone_from, phone_to)
+    call_data = call_from_to.format(phone_from, phone_to)
     print(call_data)
     s.send(bytes(call_data, 'utf-8'))
     sleep(0.1)

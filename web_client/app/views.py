@@ -26,7 +26,8 @@ class CallFromAbonent(FormView):
 
     def post(self, request):
         Thread(target=call_from_abonent, args=(request.POST['phone_from'], request.POST['phone_to'])).start()
-        return HttpResponse('Ожидайте звонка менеджера на номер %s. ' % request.POST['phone'])
+        return HttpResponse('Ожидайте звонка клиенту на номер %s с номера %s. ' %
+                            (request.POST['phone_to'], request.POST['phone_from']))
 
     def form_valid(self, form):
         return super(InputPhoneForm, self).form_valid(form)
